@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FoodEyeAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Database_v1 : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "FoodEyeItems",
+                name: "Items",
                 columns: table => new
                 {
                     ItemID = table.Column<int>(type: "int", nullable: false)
@@ -30,11 +30,29 @@ namespace FoodEyeAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FoodEyeItems", x => x.ItemID);
+                    table.PrimaryKey("PK_Items", x => x.ItemID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserID = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Age = table.Column<int>(type: "int", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserRole = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.UserID);
                 });
 
             migrationBuilder.InsertData(
-                table: "FoodEyeItems",
+                table: "Items",
                 columns: new[] { "ItemID", "DateExpiresOn", "DatePurchased", "Description", "ImagePath", "ItemName", "ItemType", "Quantity", "StoredAt" },
                 values: new object[,]
                 {
@@ -44,13 +62,21 @@ namespace FoodEyeAPI.Migrations
                     { 4, new DateTime(2023, 8, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 7, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "Packed shiitake mushrooms for cooking", "assets/images/refrigerated.png", "Dutch Lady Milk", "Refrigerated", 3, "Fridge" },
                     { 5, new DateTime(2024, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Macaroni pasta, great for cooking", "assets/images/non-perishables.png", "Macaroni Pasta 500g", "Non-perishables", 4, "Cupboard" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "UserID", "Address", "Age", "DateOfBirth", "Email", "Name", "Password", "UserRole" },
+                values: new object[] { "411d825b-b796-44b2-ae5f-d0e4d8c31dcf", "123 Main Street", 30, new DateTime(1993, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "a@a.a", "John Doe", "123123", "Admin" });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "FoodEyeItems");
+                name: "Items");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

@@ -4,16 +4,19 @@ using FoodEyeAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
 namespace FoodEyeAPI.Migrations
 {
-    [DbContext(typeof(FoodEyeDbContext))]
-    partial class FoodEyeDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(DatabaseContext))]
+    [Migration("20230803171020_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace FoodEyeAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("FoodEyeAPI.Models.Table.FoodEyeItem", b =>
+            modelBuilder.Entity("FoodEyeAPI.Models.Table.Item", b =>
                 {
                     b.Property<int>("ItemID")
                         .ValueGeneratedOnAdd()
@@ -64,7 +67,7 @@ namespace FoodEyeAPI.Migrations
 
                     b.HasKey("ItemID");
 
-                    b.ToTable("FoodEyeItems");
+                    b.ToTable("Items");
 
                     b.HasData(
                         new
@@ -126,6 +129,61 @@ namespace FoodEyeAPI.Migrations
                             ItemType = "Non-perishables",
                             Quantity = 4,
                             StoredAt = "Cupboard"
+                        });
+                });
+
+            modelBuilder.Entity("FoodEyeAPI.Models.Table.User", b =>
+                {
+                    b.Property<string>("UserID")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("UserRole")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.HasKey("UserID");
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserID = "411d825b-b796-44b2-ae5f-d0e4d8c31dcf",
+                            Address = "123 Main Street",
+                            Age = 30,
+                            DateOfBirth = new DateTime(1993, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "a@a.a",
+                            Name = "John Doe",
+                            Password = "123123",
+                            UserRole = "Admin"
                         });
                 });
 #pragma warning restore 612, 618

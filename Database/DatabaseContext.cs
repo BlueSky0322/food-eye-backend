@@ -5,25 +5,40 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FoodEyeAPI.Database;
 
-public partial class FoodEyeDbContext : DbContext
+public partial class DatabaseContext : DbContext
 {
-    public FoodEyeDbContext()
+    public DatabaseContext()
     {
     }
 
-    public FoodEyeDbContext(DbContextOptions<FoodEyeDbContext> options)
+    public DatabaseContext(DbContextOptions<DatabaseContext> options)
         : base(options)
     {
     }
-    public DbSet<FoodEyeItem> FoodEyeItems { get; set; }
-
+    public DbSet<Item> Items { get; set; }
+    public DbSet<User> Users { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //OnModelCreatingPartial(modelBuilder);
-        modelBuilder.Entity<FoodEyeItem>().HasData(
-            new FoodEyeItem
+        // Seed data for Users
+        var user = new User
+        {
+            UserID = Guid.NewGuid().ToString(),
+            Email = "a@a.a",
+            Password = "123123",
+            Name = "John Doe",
+            Age = 30,
+            Address = "123 Main Street",
+            DateOfBirth = new DateTime(1993, 5, 15),
+            UserRole = "Admin"
+        };
+
+        modelBuilder.Entity<User>().HasData(user);
+
+        modelBuilder.Entity<Item>().HasData(
+            new Item
             {
                 ItemID = 1,
+                UserId = user.UserID,
                 ItemName = "GuLongBraised Peanuts 170g",
                 ItemType = "Canned Goods",
                 Quantity = 1,
@@ -33,9 +48,10 @@ public partial class FoodEyeDbContext : DbContext
                 StoredAt = "Pantry",
                 Description = "This is a can of braised peanuts"
             },
-            new FoodEyeItem
+            new Item
             {
                 ItemID = 2,
+                UserId = user.UserID,
                 ItemName = "โก๋แก่ Koh-Kae Peanuts Nori Wasabi Flavour Coated Delicious With Japanese Seaweed 160g",
                 ItemType = "Snack Foods",
                 Quantity = 3,
@@ -45,9 +61,10 @@ public partial class FoodEyeDbContext : DbContext
                 StoredAt = "Pantry",
                 Description = "This is a can of braised peanuts"
             },
-            new FoodEyeItem
+            new Item
             {
                 ItemID = 3,
+                UserId = user.UserID,
                 ItemName = "Shiitake Mushrooms (Packed)",
                 ItemType = "Fresh Produce",
                 Quantity = 6,
@@ -57,9 +74,10 @@ public partial class FoodEyeDbContext : DbContext
                 StoredAt = "Fridge",
                 Description = "Fresh milk from Dutch Lady brand"
             },
-            new FoodEyeItem
+            new Item
             {
                 ItemID = 4,
+                UserId = user.UserID,
                 ItemName = "Dutch Lady Milk",
                 ItemType = "Refrigerated",
                 Quantity = 3,
@@ -69,9 +87,10 @@ public partial class FoodEyeDbContext : DbContext
                 StoredAt = "Fridge",
                 Description = "Packed shiitake mushrooms for cooking"
             },
-            new FoodEyeItem
+            new Item
             {
                 ItemID = 5,
+                UserId = user.UserID,
                 ItemName = "Macaroni Pasta 500g",
                 ItemType = "Non-perishables",
                 Quantity = 4,
@@ -82,5 +101,11 @@ public partial class FoodEyeDbContext : DbContext
                 Description = "Macaroni pasta, great for cooking"
             }
             );
+
+        modelBuilder.Entity<Item>()
+            .HasOne<User>(i => i.User)
+            .WithMany(u => u.Items)
+            .HasForeignKey(i => i.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

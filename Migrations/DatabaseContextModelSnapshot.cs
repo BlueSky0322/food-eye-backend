@@ -4,19 +4,16 @@ using FoodEyeAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
 namespace FoodEyeAPI.Migrations
 {
-    [DbContext(typeof(FoodEyeDbContext))]
-    [Migration("20230726131604_Database_v1")]
-    partial class Database_v1
+    [DbContext(typeof(DatabaseContext))]
+    partial class DatabaseContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +22,7 @@ namespace FoodEyeAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("FoodEyeAPI.Models.Table.FoodEyeItem", b =>
+            modelBuilder.Entity("FoodEyeAPI.Models.Table.Item", b =>
                 {
                     b.Property<int>("ItemID")
                         .ValueGeneratedOnAdd()
@@ -65,9 +62,15 @@ namespace FoodEyeAPI.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
                     b.HasKey("ItemID");
 
-                    b.ToTable("FoodEyeItems");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Items");
 
                     b.HasData(
                         new
@@ -80,7 +83,8 @@ namespace FoodEyeAPI.Migrations
                             ItemName = "GuLongBraised Peanuts 170g",
                             ItemType = "Canned Goods",
                             Quantity = 1,
-                            StoredAt = "Pantry"
+                            StoredAt = "Pantry",
+                            UserId = "c62b40ba-27ac-4d0b-9bf9-a6361540da00"
                         },
                         new
                         {
@@ -92,7 +96,8 @@ namespace FoodEyeAPI.Migrations
                             ItemName = "โก๋แก่ Koh-Kae Peanuts Nori Wasabi Flavour Coated Delicious With Japanese Seaweed 160g",
                             ItemType = "Snack Foods",
                             Quantity = 3,
-                            StoredAt = "Pantry"
+                            StoredAt = "Pantry",
+                            UserId = "c62b40ba-27ac-4d0b-9bf9-a6361540da00"
                         },
                         new
                         {
@@ -104,7 +109,8 @@ namespace FoodEyeAPI.Migrations
                             ItemName = "Shiitake Mushrooms (Packed)",
                             ItemType = "Fresh Produce",
                             Quantity = 6,
-                            StoredAt = "Fridge"
+                            StoredAt = "Fridge",
+                            UserId = "c62b40ba-27ac-4d0b-9bf9-a6361540da00"
                         },
                         new
                         {
@@ -116,7 +122,8 @@ namespace FoodEyeAPI.Migrations
                             ItemName = "Dutch Lady Milk",
                             ItemType = "Refrigerated",
                             Quantity = 3,
-                            StoredAt = "Fridge"
+                            StoredAt = "Fridge",
+                            UserId = "c62b40ba-27ac-4d0b-9bf9-a6361540da00"
                         },
                         new
                         {
@@ -128,8 +135,80 @@ namespace FoodEyeAPI.Migrations
                             ItemName = "Macaroni Pasta 500g",
                             ItemType = "Non-perishables",
                             Quantity = 4,
-                            StoredAt = "Cupboard"
+                            StoredAt = "Cupboard",
+                            UserId = "c62b40ba-27ac-4d0b-9bf9-a6361540da00"
                         });
+                });
+
+            modelBuilder.Entity("FoodEyeAPI.Models.Table.User", b =>
+                {
+                    b.Property<string>("UserID")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("UserRole")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.HasKey("UserID");
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserID = "c62b40ba-27ac-4d0b-9bf9-a6361540da00",
+                            Address = "123 Main Street",
+                            Age = 30,
+                            DateOfBirth = new DateTime(1993, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "a@a.a",
+                            Name = "John Doe",
+                            Password = "123123",
+                            UserRole = "Admin"
+                        });
+                });
+
+            modelBuilder.Entity("FoodEyeAPI.Models.Table.Item", b =>
+                {
+                    b.HasOne("FoodEyeAPI.Models.Table.User", "User")
+                        .WithMany("Items")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FoodEyeAPI.Models.Table.User", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

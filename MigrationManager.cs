@@ -9,7 +9,7 @@ namespace FoodEyeAPI
         {
             using (var scope = webApp.Services.CreateScope())
             {
-                using (var appContext = scope.ServiceProvider.GetRequiredService<FoodEyeDbContext>())
+                using (var appContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>())
                 {
                     try
                     {

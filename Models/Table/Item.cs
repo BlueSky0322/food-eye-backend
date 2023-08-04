@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FoodEyeAPI.Models.Table
 {
-    public class FoodEyeItem
+    public class Item
     {
         [Key]
         public int ItemID { get; set; }
@@ -22,5 +23,10 @@ namespace FoodEyeAPI.Models.Table
         public string StoredAt { get; set; }
         [StringLength(256)]
         public string? Description { get; set; }
+
+        // Foreign key to reference the User who owns this item
+        [ForeignKey("User")]
+        public string UserId { get; set; }
+        public virtual User User { get; set; }
     }
 }

@@ -10,43 +10,43 @@ namespace FoodEyeAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FoodEyeItemsController : ControllerBase
+    public class ItemController : ControllerBase
     {
-        private readonly FoodEyeDbContext _context;
+        private readonly DatabaseContext _context;
 
-        public FoodEyeItemsController(FoodEyeDbContext context)
+        public ItemController(DatabaseContext context)
         {
             _context = context;
         }
         // GET: api/FoodEyeItems
         [HttpGet("GetAllItems")]
-        public ActionResult<IEnumerable<FoodEyeItem>> GetAllItems()
+        public ActionResult<IEnumerable<Item>> GetAllItems()
         {
-            return _context.FoodEyeItems.ToList();
+            return _context.Items.ToList();
         }
 
         // GET: api/FoodEyeItems/5
         [HttpGet("GetItemByID/{id}")]
-        public ActionResult<FoodEyeItem> GetFoodEyeItem(int id)
+        public ActionResult<Item> GetFoodEyeItem(int id)
         {
-            var foodEyeItem = _context.FoodEyeItems.Find(id);
+            var Items = _context.Items.Find(id);
 
-            if (foodEyeItem == null)
+            if (Items == null)
             {
                 return NotFound();
             }
 
-            return foodEyeItem;
+            return Items;
         }
 
         // GET: api/FoodEyeItems/GetItemsExpiringWithin/{days}
         [HttpGet("GetItemsExpiringWithin/{days}")]
-        public ActionResult<IEnumerable<FoodEyeItem>> GetItemsExpiringWithin(int days)
+        public ActionResult<IEnumerable<Item>> GetItemsExpiringWithin(int days)
         {
             DateTime now = DateTime.Now;
             DateTime targetDate = now.AddDays(days);
 
-            var retrievedItems = _context.FoodEyeItems
+            var retrievedItems = _context.Items
                 .Where(item => item.DateExpiresOn <= targetDate)
                 .ToList();
 
@@ -55,11 +55,11 @@ namespace FoodEyeAPI.Controllers
 
         // GET: api/FoodEyeItems/GetNotExpiredItems
         [HttpGet("GetFreshItems")]
-        public ActionResult<IEnumerable<FoodEyeItem>> GetFreshItems()
+        public ActionResult<IEnumerable<Item>> GetFreshItems()
         {
             DateTime now = DateTime.Now;
 
-            var retrievedItems = _context.FoodEyeItems
+            var retrievedItems = _context.Items
                 .Where(item => item.DateExpiresOn > now)
                 .ToList();
 
@@ -68,33 +68,33 @@ namespace FoodEyeAPI.Controllers
 
         // POST: api/FoodEyeItems
         [HttpPost("AddFEItem")]
-        public async Task<IActionResult> AddFEItem(FoodEyeItem foodEyeItem)
+        public async Task<IActionResult> AddFEItem(Item Items)
         {
-            _context.FoodEyeItems.Add(foodEyeItem);
+            _context.Items.Add(Items);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetFoodEyeItem), new { id = foodEyeItem.ItemID }, foodEyeItem);
+            return CreatedAtAction(nameof(GetFoodEyeItem), new { id = Items.ItemID }, Items);
         }
 
         // PUT: api/FoodEyeItems/5
         [HttpPut("UpdateFEItem/{id}")]
         public IActionResult EditItem(int id, FEUpdateItemRequest updatedItem)
         {
-            var foodEyeItem = _context.FoodEyeItems.Find(id);
+            var Items = _context.Items.Find(id);
 
-            if (foodEyeItem == null)
+            if (Items == null)
             {
                 return NotFound();
             }
 
-            foodEyeItem.ItemName = updatedItem.ItemName;
-            foodEyeItem.ItemType = updatedItem.ItemType;
-            foodEyeItem.Quantity = updatedItem.Quantity;
-            foodEyeItem.DatePurchased = updatedItem.DatePurchased;
-            foodEyeItem.DateExpiresOn = updatedItem.DateExpiresOn;
-            foodEyeItem.ImagePath = updatedItem.ImagePath;
-            foodEyeItem.StoredAt = updatedItem.StoredAt;
-            foodEyeItem.Description = updatedItem.Description;
+            Items.ItemName = updatedItem.ItemName;
+            Items.ItemType = updatedItem.ItemType;
+            Items.Quantity = updatedItem.Quantity;
+            Items.DatePurchased = updatedItem.DatePurchased;
+            Items.DateExpiresOn = updatedItem.DateExpiresOn;
+            Items.ImagePath = updatedItem.ImagePath;
+            Items.StoredAt = updatedItem.StoredAt;
+            Items.Description = updatedItem.Description;
 
             _context.SaveChanges();
 
@@ -105,14 +105,14 @@ namespace FoodEyeAPI.Controllers
         [HttpDelete("DeleteFEItem/{id}")]
         public IActionResult DeleteItem(int id)
         {
-            var foodEyeItem = _context.FoodEyeItems.Find(id);
+            var Items = _context.Items.Find(id);
 
-            if (foodEyeItem == null)
+            if (Items == null)
             {
                 return NotFound();
             }
 
-            _context.FoodEyeItems.Remove(foodEyeItem);
+            _context.Items.Remove(Items);
             _context.SaveChanges();
 
             return NoContent();

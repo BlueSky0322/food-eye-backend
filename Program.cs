@@ -7,8 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("FoodEyeContextConnection") ?? 
     throw new InvalidOperationException("Connection string 'FoodEyeContextConnection' not found.");
 // Add services to the container.
-builder.Services.AddDbContext<FoodEyeDbContext>(options => options.UseSqlServer(connectionString));
-
+builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
