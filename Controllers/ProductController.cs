@@ -112,9 +112,9 @@ namespace FoodEyeAPI.Controllers
                 {
                     try
                     {
-                        List<string> getKeys = getValues();
-                        var awsS3client = new AmazonS3Client(getKeys[0], getKeys[1], getKeys[2], RegionEndpoint.USEast1);// Read the file from the file path
-
+                        //List<string> getKeys = getValues();
+                        //var awsS3client = new AmazonS3Client(getKeys[0], getKeys[1], getKeys[2], RegionEndpoint.USEast1);// Read the file from the file path
+                        var awsS3client = new AmazonS3Client();
                         // Extract the filename from the file path for S3Key
                         var s3Key = "images/sellerproducts/" + productImage.FileName;
 
@@ -170,9 +170,9 @@ namespace FoodEyeAPI.Controllers
             {
                 try
                 {
-                    List<string> values = getValues();
-                    var awsS3client = new AmazonS3Client(values[0], values[1], values[2], RegionEndpoint.USEast1);// Read the file from the file path
-
+                    //List<string> values = getValues();
+                    //var awsS3client = new AmazonS3Client(values[0], values[1], values[2], RegionEndpoint.USEast1);// Read the file from the file path
+                    var awsS3client = new AmazonS3Client();
                     // Extract the filename from the file path for S3Key
                     var s3Key = "images/sellerproducts/" + productImage.FileName;
 
@@ -254,9 +254,9 @@ namespace FoodEyeAPI.Controllers
             {
                 try
                 {
-                    List<string> getKeys = getValues();
-                    var awsS3client = new AmazonS3Client(getKeys[0], getKeys[1], getKeys[2], RegionEndpoint.USEast1);// Read the file from the file path
-
+                    //List<string> getKeys = getValues();
+                    //var awsS3client = new AmazonS3Client(getKeys[0], getKeys[1], getKeys[2], RegionEndpoint.USEast1);// Read the file from the file path
+                    var awsS3client = new AmazonS3Client();
                     // Extract the filename from the file path for S3Key
                     var s3Key = productToDelete.ProductS3Key;
 

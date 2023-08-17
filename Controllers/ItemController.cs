@@ -7,6 +7,9 @@ using FoodEyeAPI.Models.Table;
 using Microsoft.AspNetCore.Mvc;
 using Amazon;
 using Newtonsoft.Json;
+using Amazon.S3.Util;
+using Amazon.Runtime.Internal.Endpoints.StandardLibrary;
+using System.Net;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -121,6 +124,38 @@ namespace FoodEyeAPI.Controllers
             return Ok();
         }
 
+        [HttpPost("AddToS3BucketFromCredentialsFile")]
+        public async Task<IActionResult> AddToS3BucketFromCredentialsFile(IFormFile itemImage)
+        {
+            if (itemImage != null && itemImage.Length > 0)
+            {
+                try
+                {
+                    
+                    var awsS3client = new AmazonS3Client();
+                    // Extract the filename from the file path for S3Key
+                    var s3Key = "images/selleritems/" + itemImage.FileName;
+
+                    // Upload the image to AWS S3
+                    PutObjectRequest uploadRequest = new PutObjectRequest //generate the request
+                    {
+                        InputStream = itemImage.OpenReadStream(),
+                        BucketName = s3BucketName,
+                        Key = s3Key,
+                        CannedACL = S3CannedACL.PublicRead
+                    };
+
+                    await awsS3client.PutObjectAsync(uploadRequest);
+
+                }
+                catch (AmazonS3Exception ex)
+                {
+                    return BadRequest("Error: " + ex.Message);
+                }
+            }
+            return Ok();
+        }
+
         [HttpPost("AddItem")]
         public async Task<IActionResult> AddFEItem(IFormFile? itemImage, [FromForm] string itemData)
         {
@@ -143,8 +178,9 @@ namespace FoodEyeAPI.Controllers
                 {
                     try
                     {
-                        List<string> getKeys = getValues();
-                        var awsS3client = new AmazonS3Client(getKeys[0], getKeys[1], getKeys[2], RegionEndpoint.USEast1);
+                        //    List<string> getKeys = getValues();
+                        //    var awsS3client = new AmazonS3Client(getKeys[0], getKeys[1], getKeys[2], RegionEndpoint.USEast1);
+                        var awsS3client = new AmazonS3Client();
                         // Extract the filename from the file path for S3Key
                         var s3Key = "images/selleritems/" + itemImage.FileName;
                         // Upload the image to AWS S3
@@ -194,8 +230,10 @@ namespace FoodEyeAPI.Controllers
             {
                 try
                 {
-                    List<string> values = getValues();
-                    var awsS3client = new AmazonS3Client(values[0], values[1], values[2], RegionEndpoint.USEast1);// Read the file from the file path
+                    //List<string> values = getValues();
+                    //var awsS3client = new AmazonS3Client(values[0], values[1], values[2], RegionEndpoint.USEast1);// Read the file from the file path
+
+                    var awsS3client = new AmazonS3Client();
 
                     // Extract the filename from the file path for S3Key
                     var s3Key = "images/selleritems/" + itemImage.FileName;
@@ -283,9 +321,9 @@ namespace FoodEyeAPI.Controllers
             {
                 try
                 {
-                    List<string> getKeys = getValues();
-                    var awsS3client = new AmazonS3Client(getKeys[0], getKeys[1], getKeys[2], RegionEndpoint.USEast1);// Read the file from the file path
-
+                    //List<string> getKeys = getValues();
+                    //var awsS3client = new AmazonS3Client(getKeys[0], getKeys[1], getKeys[2], RegionEndpoint.USEast1);// Read the file from the file path
+                    var awsS3client = new AmazonS3Client();
                     // Extract the filename from the file path for S3Key
                     var s3Key = itemToDelete.ItemS3Key;
 
