@@ -34,7 +34,8 @@ namespace FoodEyeAPI.Controllers
                     SellerName = order.Product.User.Name,     
                     Quantity = order.Quantity,
                     OrderDate = order.OrderDate,
-                    OrderStatus = order.OrderStatus
+                    OrderStatus = order.OrderStatus,
+                    OrderDetails = order.OrderDetails,                    
                 })
                 .ToList();
 
@@ -113,6 +114,7 @@ namespace FoodEyeAPI.Controllers
             }
 
             Orders.Quantity = updatedOrder.Quantity;
+            Orders.OrderDetails = updatedOrder.OrderDetails;
 
             _context.SaveChanges();
             return Ok();

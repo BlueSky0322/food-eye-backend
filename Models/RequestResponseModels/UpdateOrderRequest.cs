@@ -8,6 +8,7 @@ namespace FoodEyeAPI.Models.RequestResponseModels
     {
         public int OrderId { get; set; }
         public int Quantity { get; set; }
+        public string OrderDetails { get; set; }
     }
 
     public class SellerUpdateOrderRequest

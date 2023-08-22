@@ -12,5 +12,6 @@ namespace FoodEyeAPI.Models.RequestResponseModels
         public int Quantity { get; set; }
         public DateTime OrderDate { get; set; }
         public string OrderStatus { get; set; }
+        public string OrderDetails { get; set; }
     }
 }
