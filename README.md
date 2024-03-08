@@ -34,4 +34,16 @@ Alternatively, you can install them via NuGet Package Manager, here's the list:
 1. From VS 2022, go to `View > SQL Server Object Explorer` and open the SQL Server Object Explorer.
 2. Locate the local database connection.
 3. View the instance properties. From there, find the Connection String parameter and copy the entire string.
-4. Open `appsettings.json`, replace the connection string `FoodEyeContextConnection` with the copied one, replace the Initial Catalog parameter with `FoodEyeDB` (from “master” change to “FoodEyeDB”). 
+4. Open `appsettings.json`, replace the connection string `FoodEyeContextConnection` with the copied one, replace the Initial Catalog parameter with `FoodEyeDB`.
+5. Open Package Manager Console. In CLI:
+    ```
+    Add-Migration LoadData
+    ```
+    After build succeeded:
+    ```
+    Update-Database
+    ```
+6. Go to SQL Server Object Explorer, find the table, right click and view data to validate seeded data has been generated.
+
+### Conveyor
+
