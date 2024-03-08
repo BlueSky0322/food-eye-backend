@@ -46,4 +46,8 @@ Alternatively, you can install them via NuGet Package Manager, here's the list:
 6. Go to SQL Server Object Explorer, find the table, right click and view data to validate seeded data has been generated.
 
 ### Conveyor
-
+1. Make sure VS 2022 is closed.
+2. Download Conveyor [here](https://marketplace.visualstudio.com/items?itemName=vs-publisher-1448185.ConveyorbyKeyoti2022).
+3. Install it then restart VS 2022.
+4. Run the project in IIS Express, and take note of the `Remote URL` at the output console. Copy it for using in Frontend (for more information on the configuration, view [here](https://github.com/BlueSky0322/food-eye-frontend).
+5. Swagger UI should be running and open new browser tab (DO NOT close it, because closing it will terminate the session), indicating the API is live. 
